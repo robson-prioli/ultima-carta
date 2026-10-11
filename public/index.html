@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#10222b">
+  <title>Última Carta</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+  <!-- Nenhum script embutido na página: a política de segurança só permite /client.js -->
+  <script src="/client.js" defer></script>
+</head>
+<body>
+  <div id="conn" class="conn" role="status" hidden>Reconectando…</div>
+
+  <main>
+    <!-- ============ INÍCIO ============ -->
+    <section id="screen-home" class="screen">
+      <header class="brand">
+        <div class="fan" aria-hidden="true">
+          <span class="mini c-r"></span><span class="mini c-y"></span><span class="mini c-g"></span><span class="mini c-b"></span>
+        </div>
+        <h1>Última Carta</h1>
+        <p class="tagline">Jogo de cartas para jogar junto, cada um no seu celular.</p>
+      </header>
+
+      <div class="panel">
+        <label for="name">Seu nome</label>
+        <input id="name" type="text" maxlength="16" autocomplete="nickname" placeholder="Como te chamam?">
+        <button id="btn-create" class="btn primary" type="button">Criar sala</button>
+
+        <div class="or"><span>ou entre numa sala</span></div>
+
+        <label for="code">Código da sala</label>
+        <div class="row">
+          <input id="code" type="text" maxlength="4" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCD">
+          <button id="btn-join" class="btn" type="button">Entrar</button>
+        </div>
+      </div>
+
+      <details class="rules">
+        <summary>Como jogar</summary>
+        <ul>
+          <li>Jogue uma carta da mesma <strong>cor</strong> ou do mesmo <strong>número/símbolo</strong> da carta da mesa.</li>
+          <li><strong>Bloqueio</strong> pula o próximo. <strong>Inverte</strong> muda o sentido. <strong>+2</strong> faz o próximo comprar 2 e perder a vez.</li>
+          <li><strong>Coringa</strong> vale em qualquer carta e você escolhe a cor. <strong>Coringa +4</strong> também faz o próximo comprar 4.</li>
+          <li>Sem jogada? Compre uma carta. Se ela servir, pode jogar; senão, passa.</li>
+          <li>Ao ficar com 1 carta, aperte <strong>Última!</strong>. Quem esquecer e for pego compra 2.</li>
+          <li>Ganha quem ficar sem cartas primeiro.</li>
+        </ul>
+      </details>
+    </section>
+
+    <!-- ============ SALA DE ESPERA ============ -->
+    <section id="screen-lobby" class="screen" hidden>
+      <div class="panel">
+        <p class="eyebrow">Código da sala</p>
+        <p id="lobby-code" class="bigcode">----</p>
+        <p class="hint">Mande o link para a turma ou dite o código.</p>
+        <div class="linkbox">
+          <code id="lobby-link"></code>
+          <button id="btn-copy" class="btn small" type="button">Copiar link</button>
+        </div>
+
+        <h2>Jogadores</h2>
+        <ul id="lobby-players" class="plist"></ul>
+
+        <button id="btn-start" class="btn primary" type="button" hidden>Começar partida</button>
+        <p id="lobby-wait" class="hint"></p>
+        <button id="btn-leave-lobby" class="btn ghost" type="button">Sair da sala</button>
+      </div>
+    </section>
+
+    <!-- ============ MESA ============ -->
+    <section id="screen-game" class="screen game" hidden>
+      <header class="topbar">
+        <span>Sala <strong id="game-code"></strong></span>
+        <span id="game-round"></span>
+        <button id="btn-leave-game" class="btn small ghost" type="button">Sair</button>
+      </header>
+
+      <ul id="opponents" class="opponents" aria-label="Outros jogadores"></ul>
+
+      <div class="table">
+        <button id="btn-draw" class="pile" type="button" aria-label="Comprar carta">
+          <span class="card back"><span class="face">ÚC</span></span>
+          <span id="deck-count" class="pile-count"></span>
+        </button>
+        <div class="discard">
+          <div id="discard"></div>
+          <div class="current-color">
+            <span id="color-dot" class="dot"></span>
+            <span id="color-name"></span>
+            <span id="dir" class="dir" title="Sentido do jogo"></span>
+          </div>
+        </div>
+      </div>
+
+      <p id="status" class="status" aria-live="polite"></p>
+
+      <div class="actions">
+        <button id="btn-announce" class="btn shout" type="button" aria-pressed="false" hidden>Última!</button>
+        <button id="btn-pass" class="btn" type="button" hidden>Passar</button>
+        <button id="btn-catch" class="btn warn" type="button" hidden></button>
+      </div>
+
+      <div id="hand" class="hand" aria-label="Suas cartas"></div>
+
+      <ol id="log" class="log" aria-label="Últimas jogadas"></ol>
+
+      <div id="ended" class="ended" hidden>
+        <div class="panel">
+          <p class="eyebrow">Fim da rodada</p>
+          <p id="winner" class="winner"></p>
+          <button id="btn-again" class="btn primary" type="button" hidden>Nova rodada</button>
+          <p id="ended-wait" class="hint"></p>
+          <button id="btn-leave-ended" class="btn ghost" type="button">Sair da sala</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="color-picker" class="modal" hidden>
+    <div class="panel">
+      <p class="eyebrow">Coringa</p>
+      <h2>Escolha a cor</h2>
+      <div class="swatches">
+        <button class="swatch c-r" type="button" data-color="r">Vermelho</button>
+        <button class="swatch c-y" type="button" data-color="y">Amarelo</button>
+        <button class="swatch c-g" type="button" data-color="g">Verde</button>
+        <button class="swatch c-b" type="button" data-color="b">Azul</button>
+      </div>
+      <button id="btn-cancel-color" class="btn ghost" type="button">Cancelar</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="alert" hidden></div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+# Dependências (o Render instala sozinho)
+node_modules/
+
+# Segredos e configurações locais: NUNCA vão para o GitHub
+.env
+.env.*
+
+# Lixo do sistema
+.DS_Store
+Thumbs.db
+npm-debug.log*
+
+#
+README.md

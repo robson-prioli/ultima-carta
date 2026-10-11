@@ -1,0 +1,17 @@
+{
+  "name": "ultima-carta",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Jogo de cartas online para jogar em grupo, cada um no seu celular",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/simulacao.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "ws": "8.18.0"
+  }
+}
